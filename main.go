@@ -7,6 +7,7 @@ https://gist.github.com/csonuryilmaz/3f8f92fdad007f97986e61ad79aeb514
 import (
 	"database/sql"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"syscall"
 
@@ -29,6 +30,7 @@ func main() {
 	portPtr := flag.IntP("port", "P", 3306, "port number to use for connection")
 	userPtr := flag.StringP("user", "u", "root", "user for login")
 	usePasswordPtr := flag.BoolP("password", "p", false, "use password when connecting to server (read from tty)")
+	usePasswordFilePtr := flag.String("password-file", "", "use password when connecting to server (read from file)")
 	forcePtr := flag.BoolP("force", "f", false, "drop NEW_DB_NAME if it already exists")
 	versionPtr := flag.BoolP("version", "V", false, "output version information and exit")
 	helpPtr := flag.Bool("help", false, "this screen")
@@ -62,6 +64,11 @@ func main() {
 	if *usePasswordPtr {
 		fmt.Print("Enter Password: ")
 		bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
+		check(err)
+		password = string(bytePassword)
+	}
+	if *usePasswordFilePtr != "" {
+		bytePassword, err := ioutil.ReadFile(*usePasswordFilePtr)
 		check(err)
 		password = string(bytePassword)
 	}

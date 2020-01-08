@@ -7,6 +7,16 @@ Most documentation online implies that even if you want to clone the database in
 
 That sounds quite inefficient so after checking out this guy's [script](https://gist.github.com/csonuryilmaz/3f8f92fdad007f97986e61ad79aeb514), mysqldu~m~p was born.
 
+## Instalation
+
+Use `go get`:
+
+```
+go get github.com/fopina/mysqldup
+```
+
+Or download a pre-built binary from [releases](https://github.com/fopina/mysqldup/releases).
+
 ## Usage
 
 ```

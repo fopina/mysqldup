@@ -108,15 +108,21 @@ func main() {
 	_, err = con.Exec("USE " + newDB)
 	check(err)
 
-	_, err = con.Exec("set foreign_key_checks = 0")
+	_, err = con.Exec("SET unique_checks=0;")
+	check(err)
+	_, err = con.Exec("SET foreign_key_checks = 0;")
 	check(err)
 
 	for tableInd, table := range tablesToClone {
 		fmt.Printf("[%d / %d] cloning %v\n", tableInd+1, len(tablesToClone), table)
-		_, err = con.Exec("CREATE TABLE " + table + " SELECT * FROM " + oldDB + "." + table)
+		_, err = con.Exec("CREATE TABLE " + table + " LIKE " + oldDB + "." + table)
+		check(err)
+		_, err = con.Exec("INSERT INTO " + table + " SELECT * FROM " + oldDB + "." + table)
 		check(err)
 	}
 
-	_, err = con.Exec("set foreign_key_checks = 1")
+	_, err = con.Exec("SET unique_checks = 1;")
+	check(err)
+	_, err = con.Exec("SET foreign_key_checks = 1;")
 	check(err)
 }
